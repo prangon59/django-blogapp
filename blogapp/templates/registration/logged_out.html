@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %} Logged Out {% endblock title %}
+{% block content %}
+<div class="container">
+    <center>
+        <div class="logo f-logo">
+            <i class="fa-brands fa-blogger"></i>
+        </div>
+        <h2>You have been logged out successfully!</h2>
+        <p>Thanks for spending some quality time with us today.</p>
+        <button onclick="window.location.href='{% url 'login' %}'" class="btn btn-primary">Login Again</button>
+    </center>
+</div>
+{% endblock content %}

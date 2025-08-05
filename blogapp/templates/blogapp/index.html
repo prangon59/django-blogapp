@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Blog Home{% endblock title %}
+{% block content %}
+<main class="sp">
+      <div class="container">
+        <center>
+          <div class="search-bar">
+            <input type="text" placeholder="Search" />
+            <a href="{% url "search_page" %}" class="animated-search" onclick="searchbar()">
+              <i class="uil uil-search"></i>
+            </a>
+          </div>
+          <div class="typo">
+            {% if website_metadata.title %}
+              <h1 class="title">{{ website_metadata.title }}</h1>
+            {% else %}
+              <h1 class="title">Website blog title</h1>
+            {% endif %}
+            {% if website_metadata.description %}
+              <p>{{ website_metadata.description }}</p>
+            {% else %}
+              <p>No description available.</p>
+            {% endif %}
+          </div>
+          <div class="newsletter">
+            {% if request.session.subscribed == None %}
+            <form method="POST">
+              {% csrf_token %}
+              {{ subscriber_form }}
+              <button class="btn btn-primary">Subscribe</button>
+            </form>
+            {% endif %}
+            {% if subscribe_msg %}
+            <br><p>Subscribed Successfully</p>
+            {% endif %}
+          </div>
+        </center>
+      </div>
+    </main>
+
+    {% if featured_blogs %}
+    <section class="sp">
+      <div class="container">
+        <a href="{% url 'post_page' featured_blogs.slug %}">
+        <div class="grid-2">
+          <div class="post-img">
+            <img src="{{ featured_blogs.image.url }}" alt="" />
+          </div>
+          <div class="post-content">
+            <div class="cetagory">
+              <p>{{ post.tags.all }}</p>
+            </div>
+            <h1>
+              {{ featured_blogs.title }}
+            </h1>
+            <p class="des">
+              {{ featured_blogs.content|truncatewords:30|safe }}
+            </p>
+            <a class="learn" href="#"
+              >Learn more <span class="material-icons"> trending_flat </span></a
+            >
+          </div>
+        </div>
+        </a>
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="sp">
+      <div class="container">
+        <h1 class="sec-title">Top blogs</h1>
+        <div class="grid-3">
+
+          <!-- card -->
+          {% for post in top_posts %}
+          <a href="{% url 'post_page' post.slug %}">
+            <div class="card">
+              <div class="post-img">
+                <img src="{{ post.image.url }}" alt="" />
+                <div class="tag">{{ post.tags.all.0.name }}</div>
+              </div>
+              <div class="card-content">
+                <h3>
+                  {{ post.title }}
+                </h3>
+                <div class="author">
+                  <div class="profile-pic">
+                    <img src="{{ post.author.profile.profile_picture.url }}" alt="" />
+                  </div>
+                  <div class="details">
+                    <p>{{ post.author.username }}</p>
+                    <small>{{ post.updated_at|date }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+          <!-- card end-->
+          {% endfor %}
+        </div>
+        <center>
+          <a href="{% url "all_posts" %}"><button class="btn btn-primary rounded view">
+            View more <span class="material-icons"> trending_flat </span>
+          </button></a>
+        </center>
+      </div>
+    </section>
+    <section class="sp">
+      <div class="container">
+        <h1 class="sec-title">New blogs</h1>
+        <div class="grid-3">
+
+          {% for post in recent_posts %}
+          <!-- card -->
+          <a href="{% url 'post_page' post.slug %}">
+            <div class="card">
+              <div class="post-img">
+                <img src="{{ post.image.url }}" alt="" />
+                <div class="tag">{{ post.tags.all.0.name }}</div>
+              </div>
+              <div class="card-content">
+                <h3>
+                  {{ post.title }}
+                </h3>
+                <div class="author">
+                  <div class="profile-pic">
+                    <img src="{{ post.author.profile.profile_picture.url }}" alt="" />
+                  </div>
+                  <div class="details">
+                    <p>{{ post.author.username }}</p>
+                    <small>{{ post.updated_at|date }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+          <!-- card end-->
+          {% endfor %}
+        </div>
+        <center>
+          <a href="{% url "all_posts" %}"><button class="btn btn-primary rounded view">
+            View more <span class="material-icons"> trending_flat </span>
+          </button></a>
+        </center>
+      </div>
+    </section>
+{% endblock content %}
